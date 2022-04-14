@@ -6,7 +6,7 @@
  * http://www.madcapsoftware.com/
  * Unlicensed use is strictly prohibited
  *
- * v17.2.8116.28597
+ * v17.2.8139.35517
  */
 
 
@@ -39,7 +39,7 @@
 
     $(function () {
         if (MadCap.Utilities != null && MadCap.Utilities.LoadHandlers != null) {
-            MadCap.Utilities.LoadHandlers["MadCapSlideshow"] = Slideshow.Init;
+            MadCap.Utilities.LoadHandlers.set("MadCapSlideshow", Slideshow.Init);
 
             Slideshow.Init(document);
         }
@@ -253,7 +253,7 @@
                         }
                         else if (highlight) {
 
-                            var terms = highlight.replace('"', "").split(" ");
+                            var terms = highlight.replace(/"/g, "").split(" ");
                             for (var term = 0; term < terms.length; term++) {
                                 if (terms[term] == "") {
                                     terms.splice(terms[term], 1);

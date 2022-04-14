@@ -11,7 +11,7 @@
  * http://www.madcapsoftware.com/
  * Unlicensed use is strictly prohibited
  *
- * v17.2.8116.28597
+ * v17.2.8139.35517
  */
 
 
@@ -32,7 +32,6 @@
         this._IndexDivs = new Array();
         this._XmlDoc = null;
         this._Chunks = null;
-        this._AlphaMap = new MadCap.Utilities.Dictionary();
         this._LiCached = null;
         this._SeePrefix = null;
         this._SeeAlsoPrefix = null;

@@ -6,7 +6,7 @@
  * http://www.madcapsoftware.com/
  * Unlicensed use is strictly prohibited
  *
- * v17.2.8116.28597
+ * v17.2.8139.35517
  */
 
 (function () {
@@ -31,7 +31,7 @@
     };
 
     $(function () {
-        MadCap.Utilities.LoadHandlers["MadCapTextEffects"] = TextEffects.Init;
+        MadCap.Utilities.LoadHandlers.set("MadCapTextEffects", TextEffects.Init);
 
         TextEffects.Init(document);
     });

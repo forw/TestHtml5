@@ -6,7 +6,7 @@
  * http://www.madcapsoftware.com/
  * Unlicensed use is strictly prohibited
  *
- * v17.2.8116.28597
+ * v17.2.8139.35517
  */
 
 
@@ -18,37 +18,23 @@
     //
 
     MadCap.Utilities.Dictionary = function (ignoreCase) {
-        this._Map = Object.create(null);
-        this._Overflows = new Array();
-        this._Length = 0;
+        this._Map = new Map();
         this._IgnoreCase = ignoreCase == true;
     };
 
     var Dictionary = MadCap.Utilities.Dictionary;
 
-    Dictionary.prototype.GetLength = function (key) {
-        return this._Length;
+    Dictionary.prototype.GetLength = function () {
+        return this._Map.size;
     };
 
     Dictionary.prototype.ForEach = function (func) {
         var map = this._Map;
 
-        for (var key in map) {
-            var value = map[key];
+        for (var key of map.keys()) {
+            var value = map.get(key);
 
             var ret = func(key, value);
-
-            if (ret != undefined && !ret) {
-                return;
-            }
-        }
-
-        var overflows = this._Overflows;
-
-        for (var i = 0, length = overflows.length; i < length; i++) {
-            var item = overflows[i];
-
-            var ret = func(item.Key, item.Value);
 
             if (ret != undefined && !ret) {
                 return;
@@ -59,82 +45,19 @@
     Dictionary.prototype.GetItem = function (key) {
         if (this._IgnoreCase)
             key = key.toLowerCase();
-
-        var item = null;
-
-        if (typeof (this._Map[key]) == "function") {
-            var index = this.GetItemOverflowIndex(key);
-
-            if (index >= 0) {
-                item = this._Overflows[index].Value;
-            }
-        }
-        else {
-            item = this._Map[key];
-
-            if (typeof (item) == "undefined") {
-                item = null;
-            }
-        }
-
-        return item;
+        return this._Map.has(key) ? this._Map.get(key) : null;
     };
-
-    Dictionary.prototype.GetItemOverflowIndex = function (key) {
-        if (this._IgnoreCase)
-            key = key.toLowerCase();
-
-        var overflows = this._Overflows;
-
-        for (var i = 0, length = overflows.length; i < length; i++) {
-            if (overflows[i].Key == key) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
 
     Dictionary.prototype.Remove = function (key) {
         if (this._IgnoreCase)
             key = key.toLowerCase();
-
-        if (typeof (this._Map[key]) == "function") {
-            var index = this.GetItemOverflowIndex(key);
-
-            if (index >= 0) {
-                this._Overflows.splice(index, 1);
-
-                this._Length--;
-            }
-        }
-        else {
-            if (typeof (this._Map[key]) != "undefined") {
-                delete (this._Map[key]);
-
-                this._Length--;
-            }
-        }
+        this._Map.delete(key);
     };
 
     Dictionary.prototype.Add = function (key, value) {
         if (this._IgnoreCase)
             key = key.toLowerCase();
-
-        if (typeof (this._Map[key]) == "function") {
-            var item = this.GetItem(key);
-
-            if (item != null) {
-                this.Remove(key);
-            }
-
-            this._Overflows[this._Overflows.length] = { Key: key, Value: value };
-        }
-        else {
-            this._Map[key] = value;
-        }
-
-        this._Length++;
+        this._Map.set(key, value);
     };
 
     Dictionary.prototype.AddUnique = function (key, value) {
@@ -143,7 +66,7 @@
 
         var savedValue = this.GetItem(key);
 
-        if (typeof (savedValue) == "undefined" || !savedValue) {
+        if (!savedValue) {
             this.Add(key, value);
         }
     };
@@ -1022,11 +945,11 @@
         }
     }
 
-    MadCap.Utilities.LoadHandlers = Object.create(null);
+    MadCap.Utilities.LoadHandlers = new Map();
 
     MadCap.Utilities.InitContent = function (el) {
-        for (var key in MadCap.Utilities.LoadHandlers) {
-            MadCap.Utilities.LoadHandlers[key](el);
+        for (var loadHandler in MadCap.Utilities.LoadHandlers.values()) {
+            loadHandler(el);
         }
     }
 
@@ -1065,7 +988,7 @@
 
         if (found) {
             var name = new MadCap.Utilities.Url(path).Name;
-            var loadHandler = MadCap.Utilities.LoadHandlers[name];
+            var loadHandler = MadCap.Utilities.LoadHandlers.get(name);
 
             if (loadHandler)
                 loadHandler(context);
@@ -1085,7 +1008,7 @@
         );
     }
 
-    MadCap.Utilities.DynamicStylesheets = Object.create(null);
+    MadCap.Utilities.DynamicStylesheets = new Map();
 
     MadCap.Utilities.LoadStylesheets = function (stylesheets, insertAfter) {
         $.each(stylesheets, function (index, href) {
@@ -1109,7 +1032,7 @@
 
             var head = $('head')[0];
             var linkNode = insertAfter ? $(linkHtml).insertAfter(insertAfter) : $(linkHtml).appendTo(head);
-            MadCap.Utilities.DynamicStylesheets[href] = linkNode;
+            MadCap.Utilities.DynamicStylesheets.set(href, linkNode);
         }
     }
 
@@ -1125,7 +1048,7 @@
         $.each(MadCap.Utilities.DynamicStylesheets, function (index, item) {
             $(item).remove();
         });
-        MadCap.Utilities.DynamicStylesheets = Object.create(null);
+        MadCap.Utilities.DynamicStylesheets = new Map();
     }
 
     MadCap.Utilities.CombineRelevancy = function (relevancy1, relevancy2) {
@@ -1160,11 +1083,11 @@
         
     MadCap.Utilities.Require = function (files, onComplete) {
         if (!MadCap.Utilities._requireCache)
-            MadCap.Utilities._requireCache = Object.create(null);
+            MadCap.Utilities._requireCache = new Map();
 
         var cache = MadCap.Utilities._requireCache;
         var file = files[0]; // match require.js call (takes an array)
-        var cacheEntry = cache[file];
+        var cacheEntry = cache.get(file);
 
         if (cacheEntry && cacheEntry.data)
             onComplete(cacheEntry.data);
@@ -1172,9 +1095,9 @@
             if (cacheEntry && cacheEntry.callbacks)
                 cacheEntry.callbacks.push(onComplete);
             else {
-                cache[file] = { callbacks: [onComplete] };
+                cache.set(file, { callbacks: [onComplete] });
                 require([file], function (data) {
-                    cacheEntry = cache[file];
+                    cacheEntry = cache.get(file);
                     cacheEntry.data = data;
 
                     for (var i = 0; i < cacheEntry.callbacks.length; i++)

@@ -10,7 +10,7 @@
     * http://www.madcapsoftware.com/
     * Unlicensed use is strictly prohibited
     *
-    * v17.2.8116.28597
+    * v17.2.8139.35517
     */
 
 (function () {
@@ -27,15 +27,11 @@
         var mTocPath = tocPath;
         var mBrowseSequencePath = browseSequencePath;
         var mFilterMap = null;
-        var mFilterUrls = [];
-        var mIndexLinkMap = new MadCap.Utilities.Dictionary();
         var mConceptMap = null;
-        var mViewedConceptMap = new MadCap.Utilities.Dictionary();
         var mExists = false;
         var mAliasFile = new MadCap.WebHelp.AliasFile(mPath + "Data/Alias.xml", this);
         var mTocFile = new MadCap.WebHelp.TocFile(this, MadCap.WebHelp.TocFile.TocType.Toc);
         var mTestPromise = null;
-        var mIndexXmlDoc = null;
         var mBrowseSequenceFile = new MadCap.WebHelp.TocFile(this, MadCap.WebHelp.TocFile.TocType.BrowseSequence);
         var mSkinMap = new MadCap.Utilities.Dictionary();
 

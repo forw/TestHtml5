@@ -12,7 +12,7 @@
  * http://www.madcapsoftware.com/
  * Unlicensed use is strictly prohibited
  *
- * v17.2.8116.28597
+ * v17.2.8139.35517
  */
 
 (function () {
@@ -124,7 +124,7 @@
             for (var i = 0, length = topicPairs.length; i < length; i++) {
                 var topicAndPath = topicPairs[i].split("|");
 
-                links[links.length] = { Title: topicAndPath[0], Link: topicAndPath[1] };
+                links.push({ Title: topicAndPath[0], Link: topicAndPath[1] });
             }
         }
 
@@ -161,7 +161,7 @@
 
         var href = MadCap.Dom.GetAttribute(this, "href");
         var target = MadCap.Dom.GetAttribute(this, "target");
-        var redirect = href && !href.startsWith("#") && !href.startsWith("javascript:") &&
+        var redirect = href && !href.startsWith("#") && !href.startsWith("javascript:") && !href.startsWith("data:") && !href.startsWith("vbscript:") &&
             (target == null || target == "_self" || target == "_parent" || target == "_top");
 
         if (MadCap.ELearning && redirect)
@@ -377,7 +377,7 @@
         bookmarkName = MadCap.Utilities.Url.StripInvalidCharacters(bookmarkName);
 
         // escape apostrophe so it doesn't close the jquery query
-        bookmarkName = bookmarkName.replace('\'', '\\\'');
+        bookmarkName = bookmarkName.replace(/'/g, '\\\'');
 
         var el = $("[name='" + bookmarkName + "']");
 
@@ -440,7 +440,7 @@
                         highlight = highlight.replace(phrases[phrase], "");
                     }
                 }
-                var terms = highlight.replace('"', "").split(" ");
+                var terms = highlight.replace(/"/g, "").split(" ");
                 for (var term = 0; term < terms.length; term++) {
                     if (terms[term] == "") {
                         terms.splice(terms[term], 1);
@@ -635,7 +635,7 @@
     }
 
     $(function (e) {
-        MadCap.Utilities.LoadHandlers["MadCapTopic"] = Topic.Init;
+        MadCap.Utilities.LoadHandlers.set("MadCapTopic", Topic.Init);
 
         if (isTopic) {
             Window_Onload(e);
@@ -662,12 +662,12 @@
                 returnData.Handled = true;
             }
             else if (message == "get-topic-id") {
-                responseData[responseData.length] = _TopicID;
+                responseData.push(_TopicID);
 
                 returnData.Handled = true;
             }
             else if (message == "get-topic-url") {
-                responseData[responseData.length] = document.location.href;
+                responseData.push(document.location.href);
 
                 returnData.Handled = true;
             }
@@ -682,8 +682,8 @@
                 if (bsPath == null)
                     bsPath = MadCap.Dom.Dataset(document.documentElement, "mcBrowseSequencePath");
 
-                responseData[responseData.length] = bsPath;
-                responseData[responseData.length] = url.FullPath;
+                responseData.push(bsPath);
+                responseData.push(url.FullPath);
 
                 //
 

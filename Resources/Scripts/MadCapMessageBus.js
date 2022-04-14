@@ -3,7 +3,7 @@
  * http://www.madcapsoftware.com/
  * Unlicensed use is strictly prohibited
  *
- * v17.2.8116.28597
+ * v17.2.8139.35517
  */
 
 (function () {
@@ -15,9 +15,7 @@
     MessageBus._MessageID = 0;
 
     MessageBus.AddMessageHandler = function (HandlerFunc, contextObj) {
-        var length = MessageBus._MessageHandlerFuncs.length;
-
-        MessageBus._MessageHandlerFuncs[length] = { HandlerFunc: HandlerFunc, ContextObj: contextObj };
+        MessageBus._MessageHandlerFuncs.push({ HandlerFunc: HandlerFunc, ContextObj: contextObj });
     };
 
     MessageBus.PostMessageRequest = function (win, message, dataValues, callbackFunc) {
@@ -95,13 +93,13 @@
             returnData.Handled = true;
         }
         else if (message == "url") {
-            responseData[responseData.length] = document.location.href;
+            responseData.push(document.location.href);
 
             returnData.Handled = true;
             returnData.FireResponse = true;
         }
         else if (message == "get-title") {
-            responseData[responseData.length] = document.title;
+            responseData.push(document.title);
 
             returnData.Handled = true;
             returnData.FireResponse = true;
@@ -113,7 +111,7 @@
             returnData.Handled = true;
         }
         else if (message == "get-href") {
-            responseData[responseData.length] = document.location.href;
+            responseData.push(document.location.href);
 
             returnData.Handled = true;
             returnData.FireResponse = true;
@@ -126,13 +124,13 @@
                 returnUrl = url.QueryMap.GetItem('returnUrl');
             }
 
-            responseData[responseData.length] = returnUrl;
+            responseData.push(returnUrl);
 
             returnData.Handled = true;
             returnData.FireResponse = true;
         }
         else if (message == "get-parent-window-width") {
-            responseData[responseData.length] = window.innerWidth;
+            responseData.push(window.innerWidth);
 
             returnData.Handled = true;
             returnData.FireResponse = true;
@@ -151,7 +149,7 @@
             returnData.Handled = true;
         }
         else if (message == "get-csh-id") {
-            responseData[responseData.length] = MadCap.Default.LoadVarMap().GetItem("cshid");
+            responseData.push(MadCap.Default.LoadVarMap().GetItem("cshid"));
 
             returnData.Handled = true;
             returnData.FireResponse = true;

@@ -12,7 +12,7 @@
  * http://www.madcapsoftware.com/
  * Unlicensed use is strictly prohibited
  *
- * v17.2.8116.28597
+ * v17.2.8139.35517
  */
 
 
@@ -275,7 +275,6 @@
         this.Stemmer = null;
         this.SynonymFile = null;
         this.DownloadedSynonymFile = null;
-        this.LoadChunkCompleteFuncs = new MadCap.Utilities.Dictionary();
     };
 
     var SearchDB = Search.SearchDB;

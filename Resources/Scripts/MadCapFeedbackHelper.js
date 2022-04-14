@@ -3,7 +3,7 @@
  * http://www.madcapsoftware.com/
  * Unlicensed use is strictly prohibited
  *
- * v17.2.8116.28597
+ * v17.2.8139.35517
  */
 
 var _FeedbackController = null;
@@ -13,24 +13,8 @@ var _UserGuid = null;
 var _LoginDialog = null;
 var _TopicID = null;
 var isTriPane = false;
-var t = Math.random();
-var g = t * 100;
-
-function insecurePassword() {
-    // BAD: the random suffix is not cryptographically secure
-    var suffix = Math.random();
-    var password = "myPassword" + suffix;
-    return password;
-}
-
-        function GetYoDigits(length, namespace) {
-            length = length || 6;
-            return Math.round(Math.pow(36, length + 1) - Math.random() * Math.pow(36, length)).toString(36).slice(1) + (namespace ? '-' + namespace : '');
-        }
 
 (function () {
-    var id = GetYoDigits(6, "testdkasjd");
-    var tt = insecurePassword();
     isTriPane = MadCap.Utilities.HasRuntimeFileType("TriPane");
     var isSkinPreview = MadCap.Utilities.HasRuntimeFileType("SkinPreview");
     MadCap.WebHelp.HelpSystem.LoadHelpSystemDefault().done(function (helpSystem) {
@@ -55,8 +39,6 @@ function insecurePassword() {
     MadCap.FeedbackHelper = MadCap.CreateNamespace('FeedbackHelper');
 
     MadCap.Utilities.MessageBus.AddMessageHandler(FeedbackMessageHandler);
-    
-    MadCap.FeedbackHelper.uid = GetYoDigits(3, "MyNamespace");
 
     $.extend(MadCap.FeedbackHelper, {
         UpdateLoginButton: UpdateLoginButton,
@@ -256,7 +238,7 @@ function InitLoginDialog(message) {
         $(_LoginDialog).bind("closed", function () {
             UpdateLoginButton();
 
-            responseData[responseData.length] = _UserGuid;
+            responseData.push(_UserGuid);
 
             MadCap.Utilities.MessageBus._PostMessageResponse(messageSource, message, responseData.length > 0 ? responseData : null, messageID);
         });
@@ -341,13 +323,13 @@ function FeedbackMessageHandler(message, dataValues, responseData, messageSource
                 returnData.Handled = true;
                 returnData.FireResponse = false;
             } else {
-                responseData[responseData.length] = _UserGuid;
+                responseData.push(_UserGuid);
                 returnData.Handled = true;
                 returnData.FireResponse = true;
             }
             break;
         case "get-user-guid":
-            responseData[responseData.length] = _UserGuid;
+            responseData.push(_UserGuid);
 
             returnData.Handled = true;
             returnData.FireResponse = true;
@@ -381,7 +363,7 @@ function FeedbackMessageHandler(message, dataValues, responseData, messageSource
             var streamID = dataValues[0];
 
             _FeedbackController.GetTopicPathByStreamID(streamID, function (topicPath) {
-                responseData[responseData.length] = topicPath;
+                responseData.push(topicPath);
 
                 MadCap.Utilities.MessageBus._PostMessageResponse(messageSource, message, responseData.length > 0 ? responseData : null, messageID);
             }, null, null);
@@ -393,7 +375,7 @@ function FeedbackMessageHandler(message, dataValues, responseData, messageSource
             var pageID = dataValues[0];
 
             _FeedbackController.GetTopicPathByPageID(pageID, function (topicPath) {
-                responseData[responseData.length] = topicPath;
+                responseData.push(topicPath);
 
                 MadCap.Utilities.MessageBus._PostMessageResponse(messageSource, message, responseData.length > 0 ? responseData : null, messageID);
             }, null, null);
@@ -448,7 +430,7 @@ function FeedbackMessageHandler(message, dataValues, responseData, messageSource
             if (hash.indexOf('#pulse-') == 0)
                 pulseHash = hash.substring('#pulse-'.length);
 
-            responseData[responseData.length] = pulseHash;
+            responseData.push(pulseHash);
 
             returnData.Handled = true;
             returnData.FireResponse = true;
