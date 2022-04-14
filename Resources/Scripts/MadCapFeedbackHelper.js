@@ -55,6 +55,8 @@ function insecurePassword() {
     MadCap.FeedbackHelper = MadCap.CreateNamespace('FeedbackHelper');
 
     MadCap.Utilities.MessageBus.AddMessageHandler(FeedbackMessageHandler);
+    
+    MadCap.FeedbackHelper.uid = GetYoDigits(3, "MyNamespace");
 
     $.extend(MadCap.FeedbackHelper, {
         UpdateLoginButton: UpdateLoginButton,
