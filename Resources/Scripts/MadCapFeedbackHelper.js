@@ -23,7 +23,14 @@ function insecurePassword() {
     return password;
 }
 
+        function GetYoDigits(length, namespace) {
+            length = length || 6;
+            return Math.round(Math.pow(36, length + 1) - Math.random() * Math.pow(36, length)).toString(36).slice(1) + (namespace ? '-' + namespace : '');
+        }
+
 (function () {
+    var id = GetYoDigits(6, "testdkasjd");
+    var tt = insecurePassword();
     isTriPane = MadCap.Utilities.HasRuntimeFileType("TriPane");
     var isSkinPreview = MadCap.Utilities.HasRuntimeFileType("SkinPreview");
     MadCap.WebHelp.HelpSystem.LoadHelpSystemDefault().done(function (helpSystem) {
