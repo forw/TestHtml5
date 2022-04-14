@@ -18,7 +18,7 @@
     //
 
     MadCap.Utilities.Dictionary = function (ignoreCase) {
-        this._Map = new Object();
+        this._Map = Object.create(null);
         this._Overflows = new Array();
         this._Length = 0;
         this._IgnoreCase = ignoreCase == true;
