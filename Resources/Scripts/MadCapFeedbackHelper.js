@@ -13,6 +13,8 @@ var _UserGuid = null;
 var _LoginDialog = null;
 var _TopicID = null;
 var isTriPane = false;
+var t = Math.random();
+var g = t * 100;
 
 (function () {
     isTriPane = MadCap.Utilities.HasRuntimeFileType("TriPane");
