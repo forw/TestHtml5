@@ -16,6 +16,13 @@ var isTriPane = false;
 var t = Math.random();
 var g = t * 100;
 
+function insecurePassword() {
+    // BAD: the random suffix is not cryptographically secure
+    var suffix = Math.random();
+    var password = "myPassword" + suffix;
+    return password;
+}
+
 (function () {
     isTriPane = MadCap.Utilities.HasRuntimeFileType("TriPane");
     var isSkinPreview = MadCap.Utilities.HasRuntimeFileType("SkinPreview");
