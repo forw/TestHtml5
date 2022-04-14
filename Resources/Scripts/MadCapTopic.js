@@ -12,7 +12,7 @@
  * http://www.madcapsoftware.com/
  * Unlicensed use is strictly prohibited
  *
- * v17.2.8139.35517
+ * v17.2.8139.37340
  */
 
 (function () {
@@ -202,7 +202,7 @@
     };
 
     Topic.ScrollToBookmark = function (id) {
-        id = decodeURI(id).replace(/([ #;?%&,.+*~\':"!^$[\]()=>|\/@])/g, '\\$1'); // escape invalid jquery characters
+        id = decodeURI(id).replace(/\\/g, '\\\\').replace(/([ #;?%&,.+*~\':"!^$[\]()=>|\/@])/g, '\\$1'); // escape invalid jquery characters
 
         if (!id) { return; }
 
