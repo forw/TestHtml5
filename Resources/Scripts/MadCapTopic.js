@@ -377,7 +377,7 @@
         bookmarkName = MadCap.Utilities.Url.StripInvalidCharacters(bookmarkName);
 
         // escape apostrophe so it doesn't close the jquery query
-        bookmarkName = bookmarkName.replace(/'/g, '\\\'');
+        bookmarkName = bookmarkName.replace(/\\/g, '\\\\').replace(/'/g, '\\\'');
 
         var el = $("[name='" + bookmarkName + "']");
 
